@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.lckp.jproxy.constant.Common;
-import com.lckp.jproxy.constant.SystemConfigKey;
 import com.lckp.jproxy.service.ISonarrProwlarrService;
 import com.lckp.jproxy.service.ISonarrRuleService;
 import com.lckp.jproxy.service.ISonarrTitleService;
@@ -43,7 +42,7 @@ public class SonarrProwlarrServiceImpl extends SonarrIndexerServiceImpl implemen
 	@Override
 	protected StringBuilder getIndexerUrl(String path) {
 		StringBuilder url = new StringBuilder();
-		url.append(systemConfigService.queryValueByKey(SystemConfigKey.PROWLARR_URL));
+		url.append(ProwlarrUrlResolver.resolve(systemConfigService));
 		if (StringUtils.isNotBlank(path)) {
 			url.append(path.replaceAll(Common.CHARON_PROWLARR_PATH, ""));
 		}

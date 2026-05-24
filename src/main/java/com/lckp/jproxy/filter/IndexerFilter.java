@@ -60,6 +60,12 @@ public abstract class IndexerFilter extends BaseFilter {
 		IndexerRequest indexerRequest = getIndexerRequest(requestWrapper);
 		String searchKey = indexerRequest.getSearchKey();
 		if (StringUtils.isNotBlank(searchKey)) {
+			// Many public anime indexers only implement keyword search reliably.
+			if ("tvsearch".equals(indexerRequest.getSearchType())) {
+				indexerRequest.setSearchType("search");
+				indexerRequest.setSeasonNumber("");
+				indexerRequest.setEpisodeNumber("");
+			}
 			// 无绝对集数，去除 00
 			searchKey = searchKey.replaceAll(" 00$", "");
 			indexerRequest.setSearchKey(searchKey);
@@ -139,9 +145,9 @@ public abstract class IndexerFilter extends BaseFilter {
 		String episodeNumber = requestWrapper.getParameter(ApiField.INDEXER_EPISODE_NUMBER);
 		indexerRequest.setEpisodeNumber(episodeNumber);
 		String offset = requestWrapper.getParameter(ApiField.INDEXER_OFFSET);
-		indexerRequest.setOffset(offset == null ? null : Integer.valueOf(offset));
+		indexerRequest.setOffset(offset == null ? 0 : Integer.valueOf(offset));
 		String limit = requestWrapper.getParameter(ApiField.INDEXER_LIMIT);
-		indexerRequest.setLimit(limit == null ? null : Integer.valueOf(limit));
+		indexerRequest.setLimit(limit == null ? 100 : Integer.valueOf(limit));
 		return indexerRequest;
 	}
 

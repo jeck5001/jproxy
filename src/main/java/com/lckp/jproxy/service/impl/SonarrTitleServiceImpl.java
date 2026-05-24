@@ -285,6 +285,9 @@ public class SonarrTitleServiceImpl extends ServiceImpl<SonarrTitleMapper, Sonar
 		while (matcher.find()) {
 			String token = matcher.group(1);
 			List<SonarrRule> sonarrRuleList = tokenRuleMap.get(token);
+			if (sonarrRuleList == null || sonarrRuleList.isEmpty()) {
+				continue;
+			}
 			for (SonarrRule sonarrRule : sonarrRuleList) {
 				Matcher tokenMatcher = Pattern.compile(sonarrRule.getRegex()).matcher(text);
 				if (tokenMatcher.find()) {
